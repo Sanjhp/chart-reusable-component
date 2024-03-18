@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 const BaseChart = ({ type, data, subhead, desc }) => {
+  const columns = ["Category", "Percentage"];
+
   // Styles for heading, container, canvas, and description
   const headingStyle = {
     fontFamily: "IBM Plex Sans",
@@ -48,6 +50,7 @@ const BaseChart = ({ type, data, subhead, desc }) => {
       case "pie":
         renderPieChart(ctx, data);
         break;
+
       default:
         console.error(`Invalid chart type: ${type}`);
         break;
@@ -87,6 +90,10 @@ const BaseChart = ({ type, data, subhead, desc }) => {
           legend: {
             display: true,
             position: "bottom",
+            labels: {
+              boxWidth: 20, // Adjust the width of legend items
+              usePointStyle: true, // Use point style for legend items
+            },
           },
         },
         indexAxis: "y",
@@ -126,6 +133,9 @@ const BaseChart = ({ type, data, subhead, desc }) => {
           legend: {
             display: true,
             position: "bottom",
+            labels: {
+              boxWidth: 20,
+            },
           },
         },
       },
