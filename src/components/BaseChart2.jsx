@@ -23,6 +23,10 @@ const BaseChart = ({ type, data, subhead, desc }) => {
     fontWeight: 200,
   };
 
+  // Calculate the number of rows needed for legend
+  const numRows = Math.ceil(data.length / 2);
+  const legendHeight = numRows * 30; // Assuming each legend item has 30px height
+
   // Render the component based on the chart type
   const renderChart = () => {
     switch (type) {
@@ -35,7 +39,10 @@ const BaseChart = ({ type, data, subhead, desc }) => {
             loader={<div>Loading Chart</div>}
             data={data}
             options={{
-              legend: { position: "bottom", maxLines: 3 },
+              legend: {
+                position: "bottom",
+                maxLines: numRows, // Show all legends without pagination
+              },
             }}
           />
         );
@@ -48,7 +55,9 @@ const BaseChart = ({ type, data, subhead, desc }) => {
             loader={<div>Loading Chart</div>}
             data={data}
             options={{
-              legend: { maxLines: 3 },
+              legend: {
+                maxLines: numRows, // Show all legends without pagination
+              },
             }}
           />
         );
@@ -56,12 +65,15 @@ const BaseChart = ({ type, data, subhead, desc }) => {
         return (
           <Chart
             width={"100%"}
-            height={"100px"}
+            height={`${300 + legendHeight}px`} // Adjust height to accommodate legends
             chartType="BarChart"
             loader={<div>Loading Chart</div>}
             data={formatStackedBarData(data)}
             options={{
-              legend: { position: "bottom", maxLines: 3 },
+              legend: {
+                position: "bottom",
+                maxLines: numRows, // Show all legends without pagination
+              },
               isStacked: true,
             }}
           />
@@ -74,23 +86,23 @@ const BaseChart = ({ type, data, subhead, desc }) => {
 
   // Function to format data for stacked bar chart
   const formatStackedBarData = (data) => {
-    const formattedData = data.map((item) => {
-      const formattedItem = [item.category];
-      Object.keys(item).forEach((key) => {
-        if (key !== "category") {
-          formattedItem.push(item[key]);
-        }
+    if (data.length > 0 && data[0].category) {
+      const formattedData = data.map((item) => {
+        const formattedItem = [item.category];
+        Object.keys(item).forEach((key) => {
+          if (key !== "category") {
+            formattedItem.push(item[key]);
+          }
+        });
+        return formattedItem;
       });
-      return formattedItem;
-    });
-    formattedData.unshift([
-      "Category",
-      "Equity",
-      "Gold",
-      "Govt. Securities",
-      "Bonds",
-    ]);
-    return formattedData;
+      formattedData.unshift([
+        "Category",
+        ...Object.keys(data[0]).filter((key) => key !== "category"),
+      ]);
+      return formattedData;
+    }
+    return data;
   };
 
   // Render the component

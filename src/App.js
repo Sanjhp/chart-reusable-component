@@ -1,6 +1,5 @@
 import React from "react";
 import BaseChart from "./components/BaseChart2";
-import "./App.css";
 
 const App = () => {
   const stackBarData = [
