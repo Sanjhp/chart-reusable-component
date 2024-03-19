@@ -23,10 +23,6 @@ const BaseChart = ({ type, data, subhead, desc }) => {
     fontWeight: 200,
   };
 
-  // Calculate the number of rows needed for legend
-  const numRows = Math.ceil(data.length / 2);
-  const legendHeight = numRows * 30; // Assuming each legend item has 30px height
-
   // Render the component based on the chart type
   const renderChart = () => {
     switch (type) {
@@ -41,7 +37,7 @@ const BaseChart = ({ type, data, subhead, desc }) => {
             options={{
               legend: {
                 position: "bottom",
-                maxLines: numRows, // Show all legends without pagination
+                maxLines: Math.ceil(data.length / 2), // Calculate maxLines based on number of legend items
               },
             }}
           />
@@ -56,7 +52,7 @@ const BaseChart = ({ type, data, subhead, desc }) => {
             data={data}
             options={{
               legend: {
-                maxLines: numRows, // Show all legends without pagination
+                maxLines: Math.ceil(data.length / 2), // Calculate maxLines based on number of legend items
               },
             }}
           />
@@ -65,14 +61,14 @@ const BaseChart = ({ type, data, subhead, desc }) => {
         return (
           <Chart
             width={"100%"}
-            height={`${300 + legendHeight}px`} // Adjust height to accommodate legends
+            height={"100px"}
             chartType="BarChart"
             loader={<div>Loading Chart</div>}
             data={formatStackedBarData(data)}
             options={{
               legend: {
                 position: "bottom",
-                maxLines: numRows, // Show all legends without pagination
+                maxLines: Math.ceil(data[0].length / 2), // Calculate maxLines based on number of legend items
               },
               isStacked: true,
             }}
